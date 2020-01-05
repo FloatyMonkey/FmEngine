@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{7318ED4E-8658-4586-8626-10B4355B4E93}</ProjectGuid>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)Build\PreBuild.bat"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)Build\PreBuild.bat"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)Build\PreBuild.bat"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)Build\PreBuild.bat"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Graphics\RHI\Format.cpp" />
+    <ClCompile Include="Source\Graphics\RHI\OpenGL\Device.cpp" />
+    <ClCompile Include="Source\Graphics\RHI\OpenGL\Format.cpp" />
+    <ClCompile Include="Source\Loaders\Image.cpp" />
+    <ClCompile Include="Source\Loaders\Model.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Platform\Window.cpp" />
+    <ClCompile Include="Source\ThirdParty\Glad\glad.c" />
+    <ClCompile Include="Source\ThirdParty\stb\stb_image.cpp" />
+    <ClCompile Include="Source\Utility\Math\Color.cpp" />
+    <ClCompile Include="Source\Utility\Logger\Log.cpp" />
+    <ClCompile Include="Source\Utility\Math\Degree.cpp" />
+    <ClCompile Include="Source\Utility\Math\Functions.cpp" />
+    <ClCompile Include="Source\Utility\Math\Matrix3.cpp" />
+    <ClCompile Include="Source\Utility\Math\Matrix4.cpp" />
+    <ClCompile Include="Source\Utility\Math\Plane.cpp" />
+    <ClCompile Include="Source\Utility\Math\Quaternion.cpp" />
+    <ClCompile Include="Source\Utility\Math\Radian.cpp" />
+    <ClCompile Include="Source\Utility\Math\Random.cpp" />
+    <ClCompile Include="Source\Utility\Math\Rectangle.cpp" />
+    <ClCompile Include="Source\Utility\Math\Vector2.cpp" />
+    <ClCompile Include="Source\Utility\Math\Vector3.cpp" />
+    <ClCompile Include="Source\Utility\Math\Vector4.cpp" />
+    <ClCompile Include="Source\Utility\Memory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Graphics\GL\Shader.h" />
+    <ClInclude Include="Source\Graphics\GL\UniformBuffer.h" />
+    <ClInclude Include="Source\Graphics\RHI\Device.h" />
+    <ClInclude Include="Source\Graphics\RHI\Enumerations.h" />
+    <ClInclude Include="Source\Graphics\RHI\Format.h" />
+    <ClInclude Include="Source\Graphics\RHI\OpenGL\Device.h" />
+    <ClInclude Include="Source\Graphics\RHI\OpenGL\Format.h" />
+    <ClInclude Include="Source\Graphics\RHI\Pipeline.h" />
+    <ClInclude Include="Source\Graphics\RHI\Sampler.h" />
+    <ClInclude Include="Source\Graphics\RHI\Texture.h" />
+    <ClInclude Include="Source\Loaders\Image.h" />
+    <ClInclude Include="Source\Loaders\Model.h" />
+    <ClInclude Include="Source\Platform\Window.h" />
+    <ClInclude Include="Source\ThirdParty\Glad\glad.h" />
+    <ClInclude Include="Source\ThirdParty\Glad\khrplatform.h" />
+    <ClInclude Include="Source\ThirdParty\stb\stb_image.h" />
+    <ClInclude Include="Source\Utility\Assert.h" />
+    <ClInclude Include="Source\Utility\Containers\ArrayView.h" />
+    <ClInclude Include="Source\Utility\Math\Color.h" />
+    <ClInclude Include="Source\Utility\Common.h" />
+    <ClInclude Include="Source\Utility\CoreTypes.h" />
+    <ClInclude Include="Source\Utility\Endiannes.h" />
+    <ClInclude Include="Source\Utility\EnumClassOperators.h" />
+    <ClInclude Include="Source\Utility\Logger\Log.h" />
+    <ClInclude Include="Source\Utility\Math\Degree.h" />
+    <ClInclude Include="Source\Utility\Math\Functions.h" />
+    <ClInclude Include="Source\Utility\Math\Math.h" />
+    <ClInclude Include="Source\Utility\Math\Matrix3.h" />
+    <ClInclude Include="Source\Utility\Math\Matrix4.h" />
+    <ClInclude Include="Source\Utility\Math\Plane.h" />
+    <ClInclude Include="Source\Utility\Math\Quaternion.h" />
+    <ClInclude Include="Source\Utility\Math\Radian.h" />
+    <ClInclude Include="Source\Utility\Math\Random.h" />
+    <ClInclude Include="Source\Utility\Math\Rectangle.h" />
+    <ClInclude Include="Source\Utility\Math\Vector2.h" />
+    <ClInclude Include="Source\Utility\Math\Vector3.h" />
+    <ClInclude Include="Source\Utility\Math\Vector4.h" />
+    <ClInclude Include="Source\Utility\Memory.h" />
+    <ClInclude Include="Source\Utility\StringID.h" />
+    <ClInclude Include="Source\Utility\Templates\EnableIf.h" />
+    <ClInclude Include="Source\Utility\Templates\TypeTraits.h" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
