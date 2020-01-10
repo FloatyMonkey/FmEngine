@@ -176,10 +176,7 @@ void Setup()
 
 	// LOAD 3D MODEL
 
-	std::vector<Vertex> tempVertices;
-
-	ModelLoader::LoadOBJ("Resource/Model.obj", tempVertices);
-	ModelLoader::IndexOBJ(tempVertices, indices, vertices);
+	ModelLoader::Load("Resource/Model.fme", vertices, indices);
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -304,7 +301,7 @@ void Render()
 	Matrix4 cMatrix = AxisConversion(EAxis::nY, EAxis::Z, EAxis::Z, EAxis::Y);
 
 	Matrix4 loc = Matrix4::Translation(0.0f, -0.5f, 0.0f);
-	Matrix4 rot = Matrix4::RotationX(Degree(90.0f));
+	Matrix4 rot = Matrix4::RotationX(Degree(0.0f));
 	Matrix4 scl = Matrix4::Identity;
 
 	Matrix4 model = loc * rot * scl;

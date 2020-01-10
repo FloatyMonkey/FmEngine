@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "../Utility/CoreTypes.h"
 #include "../Utility/Math/Math.h"
 #include "../Utility/Memory.h"
 
@@ -15,18 +16,18 @@ namespace FM
 		Vector3 position;
 		Vector3 normal;
 		Vector2 texcoord;
+	};
 
-		bool operator<(const Vertex that) const {
-			return Memory::Memcmp((void*)this, (void*)&that, sizeof(Vertex)) > 0;
-		};
+	struct SubMesh
+	{
+		uint32 offset;
+		uint32 count;
 	};
 
 	class ModelLoader
 	{
 	public:
 
-		static bool LoadOBJ(const char *path, std::vector<Vertex>& vertices);
-
-		static void IndexOBJ(std::vector<Vertex>& vertices, std::vector<unsigned long>& newIndices, std::vector<Vertex>& newVertices);
+		static void Load(const char* path, std::vector<Vertex>& vertices, std::vector<unsigned long>& indices);
 	};
 }
