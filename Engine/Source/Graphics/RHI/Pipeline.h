@@ -56,13 +56,7 @@ namespace FM
 		const char* name = nullptr;
 		uint8 index = 0;
 		EFormat format = EFormat::Unknown;
-
-		//char* SemanticName = nullptr;
-		//UINT SemanticIndex = 0;
-		//EFormat format = EFormat::Unknown;
-		//UINT InputSlot = 0;
-		//EInputClassification inputClassification = EInputClassification::PerVertex;
-		//UINT InstanceDataStepRate = 0;
+		uint8 slot = 0;
 	};
 
 	// TODO: Add documentation

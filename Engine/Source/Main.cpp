@@ -15,6 +15,9 @@
 #include "Graphics/RHI/Texture.h"
 #include "Graphics/RHI/OpenGL/Device.h"
 
+#include "Graphics/RHI/Pipeline.h"
+#include "Graphics/RHI/OpenGL/Format.h"
+
 #include <iostream>
 
 using namespace FM;
@@ -159,6 +162,42 @@ HTexture baseColorMap, roughnessMap, metallicMap, normalMap;
 std::vector<Vertex> vertices;
 std::vector<unsigned long> indices;
 
+unsigned int SetupVertexAttributes(std::vector<InputElementDesc> inputs)
+{
+	GLuint vertexArray;
+	
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
+
+	int i = 0;
+	int offset = 0;
+	
+	for (InputElementDesc& desc : inputs)
+	{
+		FormatInfo info = GetFormatInfo(desc.format);
+		OpenGL::GLFormatInfo glInfo = OpenGL::Map(desc.format);
+
+		if (glInfo.type == GL_HALF_FLOAT || glInfo.type == GL_FLOAT)
+		{
+			glVertexAttribFormat(i, info.components, glInfo.type, false, offset);
+		}
+		else
+		{
+			glVertexAttribIFormat(i, info.components, glInfo.type, offset);
+		}
+
+		glVertexAttribBinding(i, desc.slot);
+		glEnableVertexAttribArray(i);
+
+		offset += info.size;
+		i++;
+	}
+
+	glBindVertexArray(0);
+
+	return vertexArray;
+}
+
 void Setup()
 {
 	printf("FmEngine - v0.1\n");
@@ -178,26 +217,22 @@ void Setup()
 
 	ModelLoader::Load("Resource/Model.fme", vertices, indices);
 
-	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned long), &indices[0], GL_STATIC_DRAW);
+	
+	std::vector<InputElementDesc> inputs = {
+		{ "POSITION", 0, EFormat::RGB32Float, 0 },
+		{ "NORMAL",   0, EFormat::RGB32Float, 0 },
+		{ "TEXCOORD", 0, EFormat::RG32Float,  0 }
+	};
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
-	glEnableVertexAttribArray(0);
-	
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
-	glEnableVertexAttribArray(1);
-	
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texcoord));
-	glEnableVertexAttribArray(2);
+	VAO = SetupVertexAttributes(inputs);
 
 	// LOAD TEXTURES
 
@@ -319,8 +354,10 @@ void Render()
 
 	uboPixel.Update(&bufferPixel);
 
-	// Render
 	glBindVertexArray(VAO);
+
+	glBindVertexBuffer(0, VBO, 0, sizeof(Vertex));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }
