@@ -18,6 +18,11 @@
 #include "Graphics/RHI/Pipeline.h"
 #include "Graphics/RHI/OpenGL/Format.h"
 
+#include "Audio/Mixer.h"
+#include "Audio/AudioClip.h"
+#include "Audio/AudioSource.h"
+#include "Modules/DirectSound/AudioDevice.h"
+
 #include <iostream>
 
 using namespace FM;
@@ -131,8 +136,35 @@ int main()
 		myIO->sumMouseWheel += wheelDelta;
 	}, &io);
 
+	AudioDevice audioDevice(window.GetWindowHandle());
+
+	AudioClip clip1;
+	clip1.Load("Resource/HappyBackground01.wav");
+
+	AudioSource source1;
+	source1.clip = &clip1;
+	source1.repeat = true;
+	source1.volume = -3;
+	source1.Play();
+
+	AudioClip clip2;
+	clip2.Load("Resource/HappyBackground02.wav");
+
+	AudioSource source2;
+	source2.clip = &clip2;
+	source2.repeat = true;
+	source2.volume = -3;
+	source2.Play();
+
+	AudioMixer mixer;
+	mixer.mAudioDevice = &audioDevice;
+
+	std::vector<AudioSource> sources = { source1, source2 };
+
 	while (window.Update())
 	{
+		mixer.Mix(sources);
+
 		io.mouseDelta = io.mousePos - io.prevMousePos;
 		io.prevMousePos = io.mousePos;
 
