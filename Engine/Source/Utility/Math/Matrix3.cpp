@@ -314,6 +314,17 @@ namespace FM
 		return r;
 	}
 
+	template<typename T>
+	TVector3<T> TMatrix3<T>::operator*(const TVector3<T>& rhs) const
+	{
+		return TVector3
+		(
+			rhs.x * m[0][0] + rhs.y * m[1][0] + rhs.z * m[2][0],
+			rhs.x * m[0][1] + rhs.y * m[1][1] + rhs.z * m[2][1],
+			rhs.x * m[0][2] + rhs.y * m[1][2] + rhs.z * m[2][2]
+		);
+	}
+
 	template <typename T>
 	TMatrix3<T> TMatrix3<T>::operator* (T rhs) const
 	{

@@ -20,13 +20,17 @@ namespace FM
 	TQuaternion<T>::TQuaternion(T x, T y, T z, T w)
 		: x(x), y(y), z(z), w(w) {}
 
+	template<typename T>
+	TQuaternion<T>::TQuaternion(const TVector3<T>& v, T w)
+		: x(v.x), y(v.y), z(v.z), w(w) {}
+
 	// Predefined quaternions
 
 	template <typename T>
 	const TQuaternion<T> TQuaternion<T>::Zero(T(0), T(0), T(0), T(0));
 
 	template <typename T>
-	const TQuaternion<T> TQuaternion<T>::Identity(T(1), T(0), T(0), T(0));
+	const TQuaternion<T> TQuaternion<T>::Identity(T(0), T(0), T(0), T(1));
 
 	// Calculations
 

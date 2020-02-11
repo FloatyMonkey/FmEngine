@@ -6,7 +6,7 @@
 // TODO: This shouldn't get included in a header file.
 #include <windows.h>
 
-#include "../Utility/CoreTypes.h"
+#include "../../Utility/CoreTypes.h"
 
 namespace FM
 {

@@ -303,50 +303,41 @@ namespace FM
 	}
 
 	template <typename T>
+	TMatrix3<T> Rotation(const TQuaternion<T>& q)
+	{
+		T tx = q.x + q.x;
+		T ty = q.y + q.y;
+		T tz = q.z + q.z;
+		T twx = tx * q.w;
+		T twy = ty * q.w;
+		T twz = tz * q.w;
+		T txx = tx * q.x;
+		T txy = ty * q.x;
+		T txz = tz * q.x;
+		T tyy = ty * q.y;
+		T tyz = tz * q.y;
+		T tzz = tz * q.z;
+
+		return TMatrix3
+		(
+			T(1) - (tyy + tzz), txy - twz, txz + twy,
+			txy + twz, T(1) - (txx + tzz), tyz - twx,
+			txz - twy, tyz + twx, T(1) - (txx + tyy)
+		);
+	}
+
+	template <typename T>
 	TMatrix4<T> TMatrix4<T>::Transformation(const TVector3<T>& translation, const TQuaternion<T>& rotation, const TVector3<T>& scale)
 	{
-		TMatrix4<T> r;
+		TMatrix3<T> rot = Rotation(rotation);
 
-		r(3, 0) = translation.x;
-		r(3, 1) = translation.y;
-		r(3, 2) = translation.z;
-
-		T x2 = T(2) * rotation.x;
-		T y2 = T(2) * rotation.y;
-		T z2 = T(2) * rotation.z;
-		
-		T xx2 = rotation.x * x2;
-		T yy2 = rotation.y * y2;
-		T zz2 = rotation.z * z2;
-
-		r(0, 0) = (T(1) - (yy2 + zz2)) * scale.x;
-		r(1, 1) = (T(1) - (xx2 + zz2)) * scale.y;
-		r(2, 2) = (T(1) - (xx2 + yy2)) * scale.z;
-
-		T yz2 = rotation.y * z2;
-		T wx2 = rotation.w * x2;
-
-		r(2, 1) = (yz2 - wx2) * scale.z;
-		r(1, 2) = (yz2 + wx2) * scale.y;
-
-		T xy2 = rotation.x * y2;
-		T wz2 = rotation.w * z2;
-
-		r(1, 0) = (xy2 - wz2) * scale.y;
-		r(0, 1) = (xy2 + wz2) * scale.x;
-
-		T xz2 = rotation.x * z2;
-		T wy2 = rotation.w * y2;
-
-		r(2, 0) = (xz2 + wy2) * scale.z;
-		r(0, 2) = (xz2 - wy2) * scale.x;
-
-		r(0, 3) = T(0);
-		r(1, 3) = T(0);
-		r(2, 3) = T(0);
-		r(3, 3) = T(1);
-
-		return r;
+		return TMatrix4
+		(
+			scale.x * rot(0, 0), scale.y * rot(0, 1), scale.z * rot(0, 2), translation.x,
+			scale.x * rot(1, 0), scale.y * rot(1, 1), scale.z * rot(1, 2), translation.y,
+			scale.x * rot(2, 0), scale.y * rot(2, 1), scale.z * rot(2, 2), translation.z,
+			T(0), T(0), T(0), T(1)
+		);
 	}
 
 	template <typename T>

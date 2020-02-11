@@ -18,21 +18,25 @@ namespace FM
 
 		AudioClip* clip = nullptr;
 
-		void Play()
-		{
-			sampleIndex = 0;
-			isPlaying = true;
-		}
-
-		void Pause(bool pause)
-		{
-			isPlaying = !pause;
-		}
-
-		void Stop()
-		{
-			sampleIndex = 0;
-			isPlaying = false;
-		}
+		void Play();
+		void Pause(bool pause);
+		void Stop();
 	};
+
+	inline void AudioSource::Play()
+	{
+		sampleIndex = 0;
+		isPlaying = true;
+	}
+
+	inline void AudioSource::Pause(bool pause)
+	{
+		isPlaying = !pause;
+	}
+
+	inline void AudioSource::Stop()
+	{
+		sampleIndex = 0;
+		isPlaying = false;
+	}
 }

@@ -21,21 +21,22 @@ struct BufferPixel
 ConstantBuffer<BufferPixel> data : register(b1);
 
 Texture2D baseColorMap : register(t0);
-Texture2D roughnessMap : register(t1);
-Texture2D metallicMap : register(t2);
-Texture2D normalMap : register(t3);
+//Texture2D roughnessMap : register(t1);
+//Texture2D metallicMap : register(t2);
+//Texture2D normalMap : register(t3);
 
 SamplerState s1 : register(s0);
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
 	float3 baseColor = pow(baseColorMap.Sample(s1, input.texCoord).rgb, 2.2);
-	float roughness = roughnessMap.Sample(s1, input.texCoord).r;
-	float metallic = metallicMap.Sample(s1, input.texCoord).r;
+	float roughness = 0.5; // roughnessMap.Sample(s1, input.texCoord).r;
+	float metallic = 0.0; // metallicMap.Sample(s1, input.texCoord).r;
 
-	float3x3 TBN = ComputeTBN(input.position, input.normal, input.texCoord);
-	float3 normal = normalMap.Sample(s1, input.texCoord).rgb * 2.0 - 1.0;
-	normal = normalize(mul(normal, TBN));
+	//float3x3 TBN = ComputeTBN(input.position, input.normal, input.texCoord);
+	//float3 normal = normalMap.Sample(s1, input.texCoord).rgb * 2.0 - 1.0;
+	//normal = normalize(mul(normal, TBN));
+	float3 normal = input.normal;
 
 	// TODO: Check if Wi is calculated correctly!
 

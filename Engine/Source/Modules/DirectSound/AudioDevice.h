@@ -16,6 +16,8 @@ namespace FM
 	{
 	public:
 
+		AudioDevice() = default;
+
 		AudioDevice(void* hwnd);
 		~AudioDevice();
 

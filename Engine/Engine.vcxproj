@@ -144,15 +144,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Audio\AudioClip.cpp" />
-    <ClCompile Include="Source\Audio\Mixer.cpp" />
+    <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\RHI\Format.cpp" />
     <ClCompile Include="Source\Graphics\RHI\OpenGL\Device.cpp" />
     <ClCompile Include="Source\Graphics\RHI\OpenGL\Format.cpp" />
     <ClCompile Include="Source\Loaders\Image.cpp" />
-    <ClCompile Include="Source\Loaders\Model.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Modules\DirectSound\AudioDevice.cpp" />
-    <ClCompile Include="Source\Platform\Window.cpp" />
+    <ClCompile Include="Source\Modules\Windows\Window.cpp" />
     <ClCompile Include="Source\ThirdParty\dr\dr_wav.cpp" />
     <ClCompile Include="Source\ThirdParty\Glad\glad.c" />
     <ClCompile Include="Source\ThirdParty\stb\stb_image.cpp" />
@@ -171,15 +171,17 @@
     <ClCompile Include="Source\Utility\Math\Vector3.cpp" />
     <ClCompile Include="Source\Utility\Math\Vector4.cpp" />
     <ClCompile Include="Source\Utility\Memory.cpp" />
+    <ClCompile Include="Source\Utility\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Audio\AudioClip.h" />
     <ClInclude Include="Source\Audio\AudioDevice.h" />
-    <ClInclude Include="Source\Audio\Mixer.h" />
     <ClInclude Include="Source\Audio\AudioSource.h" />
+    <ClInclude Include="Source\Components\Components.h" />
     <ClInclude Include="Source\ECS\ECS.h" />
     <ClInclude Include="Source\Graphics\GL\Shader.h" />
     <ClInclude Include="Source\Graphics\GL\UniformBuffer.h" />
+    <ClInclude Include="Source\Graphics\Mesh.h" />
     <ClInclude Include="Source\Graphics\RHI\Device.h" />
     <ClInclude Include="Source\Graphics\RHI\Enumerations.h" />
     <ClInclude Include="Source\Graphics\RHI\Format.h" />
@@ -189,9 +191,9 @@
     <ClInclude Include="Source\Graphics\RHI\Sampler.h" />
     <ClInclude Include="Source\Graphics\RHI\Texture.h" />
     <ClInclude Include="Source\Loaders\Image.h" />
-    <ClInclude Include="Source\Loaders\Model.h" />
     <ClInclude Include="Source\Modules\DirectSound\AudioDevice.h" />
-    <ClInclude Include="Source\Platform\Window.h" />
+    <ClInclude Include="Source\Physics\Rigidbody.h" />
+    <ClInclude Include="Source\Modules\Windows\Window.h" />
     <ClInclude Include="Source\ThirdParty\dr\dr_wav.h" />
     <ClInclude Include="Source\ThirdParty\Glad\glad.h" />
     <ClInclude Include="Source\ThirdParty\Glad\khrplatform.h" />
@@ -221,6 +223,10 @@
     <ClInclude Include="Source\Utility\StringID.h" />
     <ClInclude Include="Source\Utility\Templates\EnableIf.h" />
     <ClInclude Include="Source\Utility\Templates\TypeTraits.h" />
+    <ClInclude Include="Source\Utility\Time.h" />
+    <ClInclude Include="Source\World\Pool.h" />
+    <ClInclude Include="Source\World\View.h" />
+    <ClInclude Include="Source\World\World.h" />
   </ItemGroup>
   <PropertyGroup>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>

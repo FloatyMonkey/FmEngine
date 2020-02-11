@@ -101,6 +101,7 @@ namespace FM
 		TMatrix3 operator+ (const TMatrix3& rhs) const;
 		TMatrix3 operator- (const TMatrix3& rhs) const;
 		TMatrix3 operator* (const TMatrix3& rhs) const;
+		TVector3<T> operator* (const TVector3<T>& rhs) const;
 
 		TMatrix3 operator* (T rhs) const;
 		TMatrix3 operator/ (T rhs) const;

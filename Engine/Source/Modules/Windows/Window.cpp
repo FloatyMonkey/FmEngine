@@ -3,8 +3,8 @@
 
 #include "Window.h"
 
-#include "../Utility/Logger/Log.h"
-#include "../Utility/Math/Functions.h"
+#include "../../Utility/Logger/Log.h"
+#include "../../Utility/Math/Functions.h"
 
 namespace FM
 {

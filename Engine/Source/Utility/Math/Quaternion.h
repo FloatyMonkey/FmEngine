@@ -28,6 +28,7 @@ namespace FM
 
 		TQuaternion();
 		TQuaternion(T x, T y, T z, T w);
+		TQuaternion(const TVector3<T>& v, T w = T(0));
 
 		// Predefined quaternions
 

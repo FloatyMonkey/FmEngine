@@ -3,14 +3,16 @@
 
 #include "ThirdParty/Glad/glad.h"
 
-#include "Platform/Window.h"
+#include "Modules/Windows/Window.h"
 
 #include "Graphics/GL/Shader.h"
 #include "Graphics/GL/UniformBuffer.h"
 
 #include "Loaders/Image.h"
 
-#include "Loaders/Model.h"
+#include "Graphics/Mesh.h"
+
+#include "Physics/Rigidbody.h"
 
 #include "Graphics/RHI/Texture.h"
 #include "Graphics/RHI/OpenGL/Device.h"
@@ -18,20 +20,32 @@
 #include "Graphics/RHI/Pipeline.h"
 #include "Graphics/RHI/OpenGL/Format.h"
 
-#include "Audio/Mixer.h"
 #include "Audio/AudioClip.h"
 #include "Audio/AudioSource.h"
 #include "Modules/DirectSound/AudioDevice.h"
+
+#include "World/World.h"
+
+#include "Components/Components.h"
+
+#include "Utility/Time.h"
 
 #include <iostream>
 
 using namespace FM;
 
+namespace FM::Game
+{
+	void Setup(World& world);
+	void Update(World& world);
+}
+
+World world;
 Win32Window window;
+AudioDevice* audioDevice;
 
 void Setup();
-void Render();
-void Exit();
+void Update();
 
 struct IO
 {
@@ -106,8 +120,8 @@ int main()
 	// Window
 
 	WindowDesc desc;
-	desc.id = "OL-engine";
-	desc.title = "OL-engine";
+	desc.id = "FmEngine";
+	desc.title = "FmEngine";
 	desc.width = 1280;
 	desc.height = 720;
 
@@ -123,8 +137,6 @@ int main()
 		exit(-1);
 	}
 
-	Setup();
-
 	window.SetMouseCallback([](int x, int y, int wheelDelta, bool leftDown, bool middleDown, bool rightDown, void* user) {
 		IO* myIO = static_cast<IO*>(user);
 
@@ -136,34 +148,16 @@ int main()
 		myIO->sumMouseWheel += wheelDelta;
 	}, &io);
 
-	AudioDevice audioDevice(window.GetWindowHandle());
+	audioDevice = new AudioDevice(window.GetWindowHandle());
 
-	AudioClip clip1;
-	clip1.Load("Resource/HappyBackground01.wav");
+	Setup();
+	Game::Setup(world);
 
-	AudioSource source1;
-	source1.clip = &clip1;
-	source1.repeat = true;
-	source1.volume = -3;
-	source1.Play();
-
-	AudioClip clip2;
-	clip2.Load("Resource/HappyBackground02.wav");
-
-	AudioSource source2;
-	source2.clip = &clip2;
-	source2.repeat = true;
-	source2.volume = -3;
-	source2.Play();
-
-	AudioMixer mixer;
-	mixer.mAudioDevice = &audioDevice;
-
-	std::vector<AudioSource> sources = { source1, source2 };
+	GTime.Update(); // TODO: Ugly hack to reset dt.
 
 	while (window.Update())
 	{
-		mixer.Mix(sources);
+		GTime.Update();
 
 		io.mouseDelta = io.mousePos - io.prevMousePos;
 		io.prevMousePos = io.mousePos;
@@ -171,12 +165,11 @@ int main()
 		io.mouseWheel = io.sumMouseWheel;
 		io.sumMouseWheel = 0;
 
-		Render();
+		Game::Update(world);
+		Update();
 
 		SwapBuffers(hDc);
 	}
-
-	Exit();
 
 	wglMakeCurrent(NULL, NULL);
 	ReleaseDC((HWND)window.GetWindowHandle(), hDc);
@@ -188,11 +181,8 @@ OpenGL::Device device;
 Shader shader;
 UniformBuffer uboVertex, uboPixel;
 
-unsigned int VBO, VAO, EBO;
-HTexture baseColorMap, roughnessMap, metallicMap, normalMap;
-
-std::vector<Vertex> vertices;
-std::vector<unsigned long> indices;
+unsigned int VAO;
+HTexture baseColorMap;
 
 unsigned int SetupVertexAttributes(std::vector<InputElementDesc> inputs)
 {
@@ -244,19 +234,6 @@ void Setup()
 
 	uboVertex.Bind(0);
 	uboPixel.Bind(1);
-
-	// LOAD 3D MODEL
-
-	ModelLoader::Load("Resource/Model.fme", vertices, indices);
-
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned long), &indices[0], GL_STATIC_DRAW);
 	
 	std::vector<InputElementDesc> inputs = {
 		{ "POSITION", 0, EFormat::RGB32Float, 0 },
@@ -266,73 +243,25 @@ void Setup()
 
 	VAO = SetupVertexAttributes(inputs);
 
-	// LOAD TEXTURES
+	Image image("Resource/Checker.png", 3);
 
-	{
-		Image image("Resource/Model_COL.png", 3);
+	TextureDesc desc;
+	desc.width = image.Width();
+	desc.height = image.Height();
+	desc.data = image.GetPixels();
+	desc.format = EFormat::RGB8UNorm;
 
-		TextureDesc desc;
-		desc.width = image.Width();
-		desc.height = image.Height();
-		desc.data = image.GetPixels();
-		desc.format = EFormat::RGB8UNorm;
-
-		baseColorMap = device.CreateTexture(desc);
-	}
-
-	{
-		Image image("Resource/Model_RGH.png", 1);
-
-		TextureDesc desc;
-		desc.width = image.Width();
-		desc.height = image.Height();
-		desc.data = image.GetPixels();
-		desc.format = EFormat::R8UNorm;
-
-		roughnessMap = device.CreateTexture(desc);
-	}
-
-	{
-		Image image("Resource/Model_MTL.png", 1);
-
-		TextureDesc desc;
-		desc.width = image.Width();
-		desc.height = image.Height();
-		desc.data = image.GetPixels();
-		desc.format = EFormat::R8UNorm;
-
-		metallicMap = device.CreateTexture(desc);
-	}
-
-	{
-		Image image("Resource/Model_NRM.png", 3);
-
-		TextureDesc desc;
-		desc.width = image.Width();
-		desc.height = image.Height();
-		desc.data = image.GetPixels();
-		desc.format = EFormat::RGB8UNorm;
-
-		normalMap = device.CreateTexture(desc);
-	}
+	baseColorMap = device.CreateTexture(desc);
 }
 
-void Render()
+void Update()
 {
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// bind textures on corresponding texture units
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, baseColorMap.id);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, roughnessMap.id);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, metallicMap.id);
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, normalMap.id);
 
-	// activate shader
 	shader.Use();
 
 	// -------------------------------------------------- Mouse Orbit --------------------------------------------------
@@ -351,7 +280,7 @@ void Render()
 		camAngleY += (float)mv.y;
 	}
 
-	static float distance = 1.5f;
+	static float distance = 8.0f;
 
 	distance -= (float)io.mouseWheel * 0.03f;
 
@@ -367,15 +296,8 @@ void Render()
 
 	Matrix4 cMatrix = AxisConversion(EAxis::nY, EAxis::Z, EAxis::Z, EAxis::Y);
 
-	Matrix4 loc = Matrix4::Translation(0.0f, -0.5f, 0.0f);
-	Matrix4 rot = Matrix4::RotationX(Degree(0.0f));
-	Matrix4 scl = Matrix4::Identity;
+	Matrix4 projection = Matrix4::Perspective(Degree(65.0f), (float)window.GetWidth() / (float)window.GetHeight(), 0.1f, 1000.0f);
 
-	Matrix4 model = loc * rot * scl;
-
-	Matrix4 projection = Matrix4::Perspective(Degree(65.0f), (float)window.GetWidth() / (float)window.GetHeight(), 0.1f, 100.0f);
-
-	bufferVertex.model = (model * cMatrix).Transposed();
 	bufferVertex.view = view.Transposed();
 	bufferVertex.projection = projection.Transposed();
 
@@ -388,16 +310,117 @@ void Render()
 
 	glBindVertexArray(VAO);
 
-	glBindVertexBuffer(0, VBO, 0, sizeof(Vertex));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	float dt = GTime.GetDeltaTime();
+	std::cout << dt << "\n";
 
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-}
+	// ================================================================
+	// AUDIO SYSTEM
+	// ================================================================
 
-void Exit()
-{
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	int byteToLock;
+	int bytesToWrite;
 
-	// TODO: Delete textures
+	audioDevice->GetPosition(byteToLock, bytesToWrite);
+
+	if (bytesToWrite)
+	{
+		// Samples, counts one for L and R together.
+		int samplesToWrite = bytesToWrite / 4; // Divided by BytesPerSample.
+
+		std::vector<int16> mixBuffer(samplesToWrite * 2, 0);
+
+		auto aview = world.GetView<AudioSource>();
+
+		for (Entity e : aview)
+		{
+			AudioSource& source = aview.Get<AudioSource>(e);
+
+			if (!source.isPlaying) continue;
+
+			int offset = source.sampleIndex * 2;
+
+			for (int i = 0; i < samplesToWrite * 2; i += 2)
+			{
+				if (source.sampleIndex >= source.clip->mSampleCount)
+				{
+					if (source.repeat)
+					{
+						source.sampleIndex = 0;
+						offset = 0;
+					}
+					else
+					{
+						source.isPlaying = false;
+						source.sampleIndex = 0;
+						break;
+					}
+				}
+
+				float L = source.clip->mData[offset + i + 0];
+				float R = source.clip->mData[offset + i + 1];
+
+				L *= DecibelToLinear(source.volume);
+				R *= DecibelToLinear(source.volume);
+
+				mixBuffer[i + 0] += static_cast<int16>(L * 32767.0f);
+				mixBuffer[i + 1] += static_cast<int16>(R * 32767.0f);
+
+				source.sampleIndex += 1;
+			}
+		}
+
+		audioDevice->SetBuffer(&mixBuffer[0], byteToLock, bytesToWrite);
+	}
+
+	// ================================================================
+	// PHYSICS SYSTEM
+	// ================================================================
+
+	auto pview = world.GetView<Transform, Rigidbody>();
+
+	for (Entity e : pview)
+	{
+		Transform& tr = pview.Get<Transform>(e);
+		Rigidbody& rb = pview.Get<Rigidbody>(e);
+		
+		rb.linearAcceleration += rb.force * rb.inverseMass;
+		rb.linearVelocity += rb.linearAcceleration * dt;
+		rb.position += rb.linearVelocity * dt;
+		rb.force = 0.0f;
+		tr.position = rb.position;
+
+		//Quaternion Integrate(const Quaternion& rotation, const Vector3& dv, float dt) {
+		//	return (rotation + 0.5f * dt * Quaternion(dv) * rotation).Normalize();
+		//}
+		//Vector3 angularAcceleration = rb.inverseInertiaTensor * rb.torque;
+		//rb.angularVelocity += rb.angularAcceleration * dt;
+		//rotation = Integrate(rotation, angularVelocity, dt);
+		//rb.torque = 0.0f;
+	}
+
+	// ================================================================
+	// RENDER SYSTEM
+	// ================================================================
+
+	auto cview = world.GetView<Transform, StaticMesh>();
+
+	for (Entity e : cview)
+	{
+		Transform& transform = cview.Get<Transform>(e);
+		StaticMesh& staticMesh = cview.Get<StaticMesh>(e);
+
+		// TODO: This won't work for some reason.
+		//auto& [transform, staticMesh] = cview.Get<Transform, StaticMesh>(entity);
+
+		Matrix4 model = Matrix4::Transformation(transform.position, transform.rotation, transform.scale);
+
+		bufferVertex.model = (model * cMatrix).Transposed();
+
+		uboVertex.Update(&bufferVertex);
+
+		glBindVertexBuffer(0, staticMesh.mesh->vertexBuffer, 0, sizeof(Mesh::Vertex));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, staticMesh.mesh->indexBuffer);
+
+		glDrawElements(GL_TRIANGLES, staticMesh.mesh->mIndices.size(), GL_UNSIGNED_INT, 0);
+	}
 }
