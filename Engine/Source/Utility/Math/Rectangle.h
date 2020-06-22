@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Vector2.h"
+#include "Vector.h"
 
 namespace FM
 {
@@ -76,8 +76,4 @@ namespace FM
 	// Type aliases
 
 	using Rectangle = TRectangle<float>;
-
-	using RectangleF = TRectangle<float>;
-	using RectangleD = TRectangle<double>;
-	using RectangleI = TRectangle<int>;
 }

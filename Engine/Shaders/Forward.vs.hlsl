@@ -27,9 +27,9 @@ ConstantBuffer<BufferVertex> data : register(b0);
 
 void main(in VS_INPUT input, out PS_INPUT output)
 {
-    output.position = mul(float4(input.position, 1.0), data.model).xyz;
-    output.normal = mul(input.normal, (float3x3)data.model);
+    output.position = mul(data.model, float4(input.position, 1.0)).xyz;
+    output.normal = mul((float3x3)data.model, input.normal);
 	output.texCoord = float2(input.texCoord.x, -input.texCoord.y); // Inverse Y for OpenGL
 
-    output.pxPosition = mul(float4(output.position, 1.0), mul(data.view, data.projection));
+    output.pxPosition = mul(data.projection, mul(data.view, float4(output.position, 1.0)));
 }

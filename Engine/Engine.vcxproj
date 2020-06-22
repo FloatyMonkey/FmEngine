@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -92,7 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -130,7 +130,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -158,18 +158,8 @@
     <ClCompile Include="Source\ThirdParty\stb\stb_image.cpp" />
     <ClCompile Include="Source\Utility\Math\Color.cpp" />
     <ClCompile Include="Source\Utility\Logger\Log.cpp" />
-    <ClCompile Include="Source\Utility\Math\Degree.cpp" />
-    <ClCompile Include="Source\Utility\Math\Functions.cpp" />
-    <ClCompile Include="Source\Utility\Math\Matrix3.cpp" />
-    <ClCompile Include="Source\Utility\Math\Matrix4.cpp" />
-    <ClCompile Include="Source\Utility\Math\Plane.cpp" />
-    <ClCompile Include="Source\Utility\Math\Quaternion.cpp" />
-    <ClCompile Include="Source\Utility\Math\Radian.cpp" />
     <ClCompile Include="Source\Utility\Math\Random.cpp" />
     <ClCompile Include="Source\Utility\Math\Rectangle.cpp" />
-    <ClCompile Include="Source\Utility\Math\Vector2.cpp" />
-    <ClCompile Include="Source\Utility\Math\Vector3.cpp" />
-    <ClCompile Include="Source\Utility\Math\Vector4.cpp" />
     <ClCompile Include="Source\Utility\Memory.cpp" />
     <ClCompile Include="Source\Utility\Time.cpp" />
   </ItemGroup>
@@ -206,22 +196,21 @@
     <ClInclude Include="Source\Utility\Endiannes.h" />
     <ClInclude Include="Source\Utility\EnumClassOperators.h" />
     <ClInclude Include="Source\Utility\Logger\Log.h" />
-    <ClInclude Include="Source\Utility\Math\Degree.h" />
+    <ClInclude Include="Source\Utility\Math\Extend.h" />
     <ClInclude Include="Source\Utility\Math\Functions.h" />
     <ClInclude Include="Source\Utility\Math\Math.h" />
-    <ClInclude Include="Source\Utility\Math\Matrix3.h" />
-    <ClInclude Include="Source\Utility\Math\Matrix4.h" />
+    <ClInclude Include="Source\Utility\Math\Matrix.h" />
     <ClInclude Include="Source\Utility\Math\Plane.h" />
     <ClInclude Include="Source\Utility\Math\Quaternion.h" />
-    <ClInclude Include="Source\Utility\Math\Radian.h" />
     <ClInclude Include="Source\Utility\Math\Random.h" />
     <ClInclude Include="Source\Utility\Math\Rectangle.h" />
-    <ClInclude Include="Source\Utility\Math\Vector2.h" />
-    <ClInclude Include="Source\Utility\Math\Vector3.h" />
-    <ClInclude Include="Source\Utility\Math\Vector4.h" />
+    <ClInclude Include="Source\Utility\Math\Transform.h" />
+    <ClInclude Include="Source\Utility\Math\Transformations.h" />
+    <ClInclude Include="Source\Utility\Math\Vector.h" />
     <ClInclude Include="Source\Utility\Memory.h" />
     <ClInclude Include="Source\Utility\StringID.h" />
     <ClInclude Include="Source\Utility\Templates\EnableIf.h" />
+    <ClInclude Include="Source\Utility\Templates\NumericLimits.h" />
     <ClInclude Include="Source\Utility\Templates\TypeTraits.h" />
     <ClInclude Include="Source\Utility\Time.h" />
     <ClInclude Include="Source\World\Pool.h" />

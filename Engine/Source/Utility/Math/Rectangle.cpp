@@ -3,7 +3,7 @@
 
 #include "Rectangle.h"
 
-#include "Vector2.h"
+#include "Vector.h"
 #include "Functions.h"
 
 namespace FM
@@ -60,7 +60,7 @@ namespace FM
 	template <typename T>
 	TVector2<T> TRectangle<T>::Center() const
 	{
-		return TVector2(x + w / T(2), y + h / T(2));
+		return TVector2<T>(x + w / T(2), y + h / T(2));
 	}
 
 	template <typename T>

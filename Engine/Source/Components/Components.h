@@ -3,21 +3,9 @@
 
 #pragma once
 
-#include "../Utility/Math/Vector3.h"
-#include "../Utility/Math/Quaternion.h"
-
 namespace FM
 {
 	class Mesh;
-
-	class Transform
-	{
-	public:
-
-		Vector3 position = Vector3::Zero;
-		Quaternion rotation = Quaternion::Identity;
-		Vector3 scale = Vector3::One;
-	};
 
 	class StaticMesh
 	{

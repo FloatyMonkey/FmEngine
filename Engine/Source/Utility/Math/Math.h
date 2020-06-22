@@ -7,20 +7,16 @@
 
 #include "Functions.h"
 
-#include "Degree.h"
-#include "Radian.h"
-
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-
-#include "Matrix3.h"
-#include "Matrix4.h"
+#include "Vector.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 
 #include "Plane.h"
 
 #include "Rectangle.h"
 
-#include "Quaternion.h"
-
 #include "Random.h"
+
+#include "Transformations.h"
+
+#include "Transform.h"

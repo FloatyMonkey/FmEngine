@@ -3,14 +3,10 @@
 
 #pragma once
 
-#include "Vector3.h"
-
-// TODO: Implement the Plane.
+#include "Vector.h"
 
 namespace FM
 {
-	template <typename T> class TVector4;
-
 	/// A three-dimensional plane.
 
 	template <typename T>
@@ -19,27 +15,33 @@ namespace FM
 	public:
 
 		TVector3<T> normal;	///< Normalized normal vector of the plane.
-		T distance;			///< Distance from the plane to the origin.
+		T distance = T(0);	///< Distance from the plane to the origin.
 
 	public:
 
-		// Constructors
+		TPlane() = default;
 
-		TPlane();
-		TPlane(T a, T b, T c, T d);
-		TPlane(const TVector4<T>& equation);
-		TPlane(const TVector3<T>& normal, T distance);
-		TPlane(const TVector3<T>& normal, const TVector3<T>& point);
-		TPlane(const TVector3<T>& p0, const TVector3<T>& p1, const TVector3<T>& p2);
+		template <typename T>
+		TPlane(T a, T b, T c, T d)
+			: normal(a, b, c), distance(d) {}
 
+		template <typename T>
+		TPlane(const TVector3<T>& normal, T distance)
+			: normal(normal), distance(distance) {}
 
+		template <typename T>
+		TPlane(const TVector3<T>& normal, const TVector3<T>& point)
+			: normal(normal), distance(Math::Dot(normal, point)) {}
+
+		template <typename T>
+		TPlane(const TVector3<T>& p0, const TVector3<T>& p1, const TVector3<T>& p2)
+		{
+			normal = Math::Normalize(Math::Cross(p1 - p0, p2 - p0));
+			distance = Math::Dot(normal, p0);
+		}
 	};
 
 	// Type aliases
 
 	using Plane = TPlane<float>;
-
-	using PlaneF = TPlane<float>;
-	using PlaneD = TPlane<double>;
-	using PlaneI = TPlane<int>;
 }

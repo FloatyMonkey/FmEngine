@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "../Utility/Math/Matrix3.h"
-#include "../Utility/Math/Vector3.h"
+#include "../Utility/Math/Vector.h"
+#include "../Utility/Math/Matrix.h"
 #include "../Utility/Math/Quaternion.h"
 
 namespace FM
@@ -49,7 +49,7 @@ namespace FM
 		Vector3 linearVelocity;
 		Vector3 angularVelocity;
 
-		Vector3 linearAcceleration = -Vector3::UnitY * 9.81f; // TODO: Remove hardcoded gravity.
+		Vector3 linearAcceleration = -Vector3(0.0f, 1.0f, 0.0f) * 9.81f; // TODO: Remove hardcoded gravity.
 
 		float inverseMass;
 		Matrix3 inverseInertiaTensor;
@@ -70,7 +70,7 @@ namespace FM
 	inline void Rigidbody::AddForce(const Vector3& force, const Vector3& point)
 	{
 		this->force += force;
-		this->torque += Vector3::Cross(point - position, force);
+		this->torque += Math::Cross(point - position, force);
 	}
 
 	inline void Rigidbody::AddTorque(const Vector3& torque)

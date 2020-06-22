@@ -30,6 +30,8 @@
 
 #include "Utility/Time.h"
 
+#include "Utility/Math/Math.h"
+
 #include <iostream>
 
 using namespace FM;
@@ -93,7 +95,7 @@ Matrix3 AxisConversion(EAxis srcF, EAxis srcU, EAxis dstF = EAxis::Z, EAxis dstU
 	r(dstF0, srcF0) = Math::Sign((int)srcF * (int)dstF);
 	r(dstU0, srcU0) = Math::Sign((int)srcU * (int)dstU);
 
-	r.SetColumn(3 - srcF0 - srcU0, Vector3::Cross(r.GetColumn(srcF0), r.GetColumn(srcU0)));
+	Math::Column(r, 3 - srcF0 - srcU0, Math::Cross(Math::Column(r, srcF0), Math::Column(r, srcU0)));
 
 	return r;
 }
@@ -290,16 +292,16 @@ void Update()
 	float camY = distance * sinf(camAngleY * (Math::Pi<float> / 180.0f));
 	float camZ = distance * cosf(camAngleX * (Math::Pi<float> / 180.0f)) * cosf(camAngleY * (Math::Pi<float> / 180.0f));
 
-	Matrix4 view = Matrix4::LookAt(Vector3(camX, camY, camZ), at, up);
+	Matrix4 view = Math::LookAt(Vector3(camX, camY, camZ), at, up);
 
 	// -----------------------------------------------------------------------------------------------------------------
 
 	Matrix4 cMatrix = AxisConversion(EAxis::nY, EAxis::Z, EAxis::Z, EAxis::Y);
 
-	Matrix4 projection = Matrix4::Perspective(Degree(65.0f), (float)window.GetWidth() / (float)window.GetHeight(), 0.1f, 1000.0f);
+	Matrix4 projection = Math::Perspective(Math::ToRadians(65.0f), (float)window.GetWidth() / (float)window.GetHeight(), 0.1f, 1000.0f);
 
-	bufferVertex.view = view.Transposed();
-	bufferVertex.projection = projection.Transposed();
+	bufferVertex.view = view;
+	bufferVertex.projection = projection;
 
 	uboVertex.Update(&bufferVertex);
 
@@ -311,7 +313,6 @@ void Update()
 	glBindVertexArray(VAO);
 
 	float dt = GTime.GetDeltaTime();
-	std::cout << dt << "\n";
 
 	// ================================================================
 	// AUDIO SYSTEM
@@ -387,7 +388,7 @@ void Update()
 		rb.linearVelocity += rb.linearAcceleration * dt;
 		rb.position += rb.linearVelocity * dt;
 		rb.force = 0.0f;
-		tr.position = rb.position;
+		tr.translation = rb.position;
 
 		//Quaternion Integrate(const Quaternion& rotation, const Vector3& dv, float dt) {
 		//	return (rotation + 0.5f * dt * Quaternion(dv) * rotation).Normalize();
@@ -412,9 +413,9 @@ void Update()
 		// TODO: This won't work for some reason.
 		//auto& [transform, staticMesh] = cview.Get<Transform, StaticMesh>(entity);
 
-		Matrix4 model = Matrix4::Transformation(transform.position, transform.rotation, transform.scale);
+		Matrix4 model = Math::Transformation(transform.translation, transform.rotation, transform.scale);
 
-		bufferVertex.model = (model * cMatrix).Transposed();
+		bufferVertex.model = model * cMatrix;
 
 		uboVertex.Update(&bufferVertex);
 

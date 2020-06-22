@@ -38,7 +38,7 @@ namespace FM::Game
 			Rigidbody& rb = world.Assign<Rigidbody>(e);
 			world.Assign<StaticMesh>(e).mesh = &meshB;
 
-			tr.position.y = 1.0f;
+			tr.translation.y = 1.0f;
 			tr.scale = 0.5f;
 
 			rb.inverseMass = 1.0f / 5.0f;

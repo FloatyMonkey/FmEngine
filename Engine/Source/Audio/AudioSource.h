@@ -13,7 +13,7 @@ namespace FM
 
 		bool repeat = false;
 		bool isPlaying = false;
-		int sampleIndex = 0;
+		unsigned int sampleIndex = 0;
 		float volume = 0.0f;
 
 		AudioClip* clip = nullptr;

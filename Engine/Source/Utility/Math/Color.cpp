@@ -9,15 +9,6 @@ namespace FM
 {
 	// Constructors
 
-	Color::Color()
-		: r(0.0f), g(0.0f), b(0.0f), a(1.0f) {}
-
-	Color::Color(float grey, float a)
-		: r(grey), g(grey), b(grey), a(a) {}
-
-	Color::Color(float r, float g, float b, float a)
-		: r(r), g(g), b(b), a(a) {}
-
 	Color Color::RGB(uint8 r, uint8 g, uint8 b, uint8 a)
 	{
 		return Color(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
@@ -69,9 +60,8 @@ namespace FM
 	// Predefined colors
 
 	const Color Color::Black(0, 0, 0);
-	const Color Color::BlackTransparent(0, 0, 0, 0);
 	const Color Color::White(1, 1, 1);
-	const Color Color::WhiteTransparent(1, 1, 1, 0);
+	const Color Color::Transparent(0, 0, 0, 0);
 	const Color Color::Red(1, 0, 0);
 	const Color Color::Green(0, 1, 0);
 	const Color Color::Blue(0, 0, 1);
@@ -85,52 +75,43 @@ namespace FM
 
 	// Operators
 
-	Color operator* (float lhs, const Color& rhs)
-	{
+	Color operator* (float lhs, const Color& rhs) {
 		return Color(lhs * rhs.r, lhs * rhs.g, lhs * rhs.b, lhs * rhs.a);
 	}
 
 	// Arithmetic operators
 
-	Color Color::operator+ (const Color& rhs) const
-	{
+	Color Color::operator+ (const Color& rhs) const {
 		return Color(r + rhs.r, g + rhs.g, b + rhs.b, a + rhs.a);
 	}
 
-	Color Color::operator- (const Color& rhs) const
-	{
+	Color Color::operator- (const Color& rhs) const {
 		return Color(r - rhs.r, g - rhs.g, b - rhs.b, a - rhs.a);
 	}
 
-	Color Color::operator* (float rhs) const
-	{
+	Color Color::operator* (float rhs) const {
 		return Color(r * rhs, g * rhs, b * rhs, a * rhs);
 	}
 
-	Color Color::operator/ (float rhs) const
-	{
+	Color Color::operator/ (float rhs) const {
 		return Color(r / rhs, g / rhs, b / rhs, a / rhs);
 	}
 
 	// Assignment operators
 
-	Color& Color::operator+= (const Color& rhs)
-	{
+	Color& Color::operator+= (const Color& rhs) {
 		return *this = *this + rhs;
 	}
 
-	Color& Color::operator-= (const Color& rhs)
-	{
+	Color& Color::operator-= (const Color& rhs) {
 		return *this = *this - rhs;
 	}
 
-	Color& Color::operator*= (float rhs)
-	{
+	Color& Color::operator*= (float rhs) {
 		return *this = *this * rhs;
 	}
 
-	Color& Color::operator/= (float rhs)
-	{
+	Color& Color::operator/= (float rhs) {
 		return *this = *this / rhs;
 	}
 
@@ -139,10 +120,5 @@ namespace FM
 	bool Color::operator== (const Color& rhs) const
 	{
 		return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
-	}
-
-	bool Color::operator!= (const Color& rhs) const
-	{
-		return r != rhs.r || g != rhs.g || b != rhs.b || a != rhs.a;
 	}
 }

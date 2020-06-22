@@ -19,9 +19,8 @@ namespace FM
 	{
 	public:
 
-		union
-		{
-			float rgba[4];
+		union {
+			float rgba[4]{ 0 };
 			struct { float r, g, b, a; };
 		};
 
@@ -29,9 +28,13 @@ namespace FM
 
 		// Constructors
 
-		Color();
-		Color(float grey, float a = 1.0f);
-		Color(float r, float g, float b, float a = 1.0f);
+		Color() = default;
+
+		constexpr Color(float bw, float a = 1.0f)
+			: r(bw), g(bw), b(bw), a(a) {}
+
+		constexpr Color(float r, float g, float b, float a = 1.0f)
+			: r(r), g(g), b(b), a(a) {}
 
 		/// Returns a color specified by red, green, blue and alpha components.
 		/// All values are in the [0, 255] range.
@@ -48,9 +51,8 @@ namespace FM
 		// Predefined colors
 
 		static const Color Black;
-		static const Color BlackTransparent;
 		static const Color White;
-		static const Color WhiteTransparent;
+		static const Color Transparent;
 		static const Color Red;
 		static const Color Green;
 		static const Color Blue;
@@ -85,6 +87,5 @@ namespace FM
 		// Relational operators
 
 		bool operator== (const Color& rhs) const;
-		bool operator!= (const Color& rhs) const;
 	};
 }
